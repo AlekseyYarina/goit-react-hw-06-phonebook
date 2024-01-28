@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -12,10 +11,6 @@ export const App = () => {
   const dispatch = useDispatch();
   const contacts = useSelector(store => store.contacts.contacts);
   const filter = useSelector(store => store.contacts.filter);
-
-  useEffect(() => {
-    localStorage.setItem('contacts', JSON.stringify(contacts));
-  }, [contacts]);
 
   const handleAddContact = formData => {
     const hasDuplicates = contacts.some(
