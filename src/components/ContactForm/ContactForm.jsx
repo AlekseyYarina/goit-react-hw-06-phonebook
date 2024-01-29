@@ -1,6 +1,26 @@
+import { useDispatch, useSelector } from 'react-redux';
+import { nanoid } from 'nanoid';
+import { addContact } from 'redux-state/contacts/contactsReducer';
+import { selectContacts } from 'redux-state/contacts/selectors';
 import css from './ContactForm.module.css';
 
-export const ContactForm = ({ handleAddContact }) => {
+export const ContactForm = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(selectContacts);
+
+  const handleAddContact = formData => {
+    const hasDuplicates = contacts.some(
+      contact => contact.name === formData.name
+    );
+    if (hasDuplicates) {
+      alert(`${formData.name} is already in contact.`);
+      return;
+    }
+    const finalContact = { id: nanoid(), ...formData };
+    const action = addContact(finalContact);
+    dispatch(action);
+  };
+
   const handleFormSubmit = e => {
     e.preventDefault();
     const name = e.currentTarget.elements.name.value;
@@ -9,6 +29,7 @@ export const ContactForm = ({ handleAddContact }) => {
       name,
       number,
     };
+
     handleAddContact(formData);
     e.currentTarget.reset();
   };
